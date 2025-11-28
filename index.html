@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Group</title>
+    <title>Smart Group Hl</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ==================== PALETA DE COLORES ==================== */
         :root {
-            --bg-main: #FDF8FA;      /* Rosa muy claro */
+            --bg-main: #FDF8FA;
             --bg-card: #FFFFFF;
-            --primary: #EAB3A8;      /* Rosa pastel principal */
-            --primary-hover: #D69A8F; /* Rosa pastel más oscuro */
+            --primary: #EAB3A8;
+            --primary-hover: #D69A8F;
             --secondary: #E5E7EB;
             --secondary-hover: #D1D5DB;
-            --text-dark: #4B4B4B;    /* Gris oscuro suave */
+            --text-dark: #4B4B4B;
             --text-light: #6B7280;
             --border-color: #F3E8EB;
-            --danger: #FCA5A5;        /* Rojo coral suave */
+            --danger: #FCA5A5;
             --danger-hover: #EF4444;
-            --success: #A7F3D0;        /* Menta */
-            --warning: #FDE68A;        /* Amarillo pastel */
-            --info: #A5B4FC;          /* Lavanda */
+            --success: #A7F3D0;
+            --warning: #FDE68A;
+            --info: #A5B4FC;
         }
 
-        /* ==================== ESTILOS GLOBALES ==================== */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--bg-main); 
             color: var(--text-dark); 
         }
 
-        /* ==================== ESTILOS DE COMPONENTES ==================== */
         .card { 
             background-color: var(--bg-card); 
             border-radius: 0.75rem; 
@@ -66,7 +64,6 @@
             white-space: nowrap; 
         }
         
-        /* Estilos para los badges de estado */
         .badge { 
             display: inline-block; 
             padding: 0.25rem 0.75rem; 
@@ -80,7 +77,6 @@
         .badge-pendiente { background-color: var(--warning); color: #92400E; }
         .badge-no-en-catalogo { background-color: #9CA3AF; color: #1F2937; }
 
-        /* Estilos de botones */
         .btn { 
             display: inline-flex; 
             align-items: center; 
@@ -101,7 +97,6 @@
         .btn-secondary:hover:not(:disabled) { background-color: var(--secondary-hover); }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); color: white; }
         
-        /* Corrección de CSS: Selector más específico para evitar !important */
         .btn.btn-processing { 
             background-color: var(--success); 
             color: #065F46; 
@@ -111,7 +106,6 @@
             animation: fa-spin 1s infinite linear; 
         }
 
-        /* Estilos de campos de entrada */
         .input-field { 
             width: 100%; 
             padding: 0.5rem 0.75rem; 
@@ -129,7 +123,6 @@
             box-shadow: 0 0 0 2px #FECACA; 
         }
         
-        /* Estilos del Toast (notificaciones) */
         #toast { 
             visibility: hidden; 
             min-width: 250px; 
@@ -151,11 +144,9 @@
         #toast.error { background-color: var(--danger); color: #B91C1C; }
         #toast.success { background-color: var(--success); color: #065F46; }
 
-        /* Animaciones para el Toast */
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
-        /* Estilos del Modal */
         .modal { 
             display: none; 
             position: fixed; 
@@ -180,7 +171,6 @@
             text-align: left; 
         }
 
-        /* Estilos del nuevo módulo de últimos movimientos */
         .last-movements-item {
             display: flex;
             justify-content: space-between;
@@ -200,7 +190,7 @@
         <div class="max-w-screen-2xl mx-auto">
             
             <header class="mb-6 flex flex-wrap justify-between items-center gap-4">
-                <div><h1 class="text-3xl font-bold">Smart Group</h1></div>
+                <div><h1 class="text-3xl font-bold">Alfa Store</h1></div>
                 <div class="flex items-center gap-4">
                     <div class="text-gray-600">Usuario: <span id="user-id-display" class="font-semibold" style="color: var(--primary-hover);">...</span></div>
                     <div class="text-gray-600">Contador: <span id="contador-display" class="font-semibold text-teal-700">N/A</span></div>
@@ -237,7 +227,6 @@
                         <form id="form-ventas">
                             <div class="space-y-4">
                                 <input type="text" id="venta-sku" class="input-field sku-input" placeholder="SKU del Producto" required>
-                                <div class="text-xs text-red-400 hidden">SKU no debe tener espacios.</div>
                                 <input type="number" id="venta-cantidad" class="input-field" placeholder="Cantidad Vendida" required min="1">
                                 <button type="submit" class="btn btn-primary w-full"><i class="fa-solid fa-cart-shopping"></i>Registrar</button>
                             </div>
@@ -248,7 +237,6 @@
                         <form id="form-conteo">
                             <div class="space-y-4">
                                 <input type="text" id="conteo-sku" class="input-field sku-input" placeholder="SKU del Producto" required>
-                                <div class="text-xs text-red-400 hidden">SKU no debe tener espacios.</div>
                                 <input type="number" id="conteo-cantidad" class="input-field" placeholder="Cantidad a AÑADIR" required min="1">
                                 <button type="submit" class="btn btn-primary w-full"><i class="fa-solid fa-plus"></i>Añadir</button>
                             </div>
@@ -263,7 +251,6 @@
                             <h3 class="font-semibold text-lg mb-2"><i class="fa-solid fa-pen-to-square"></i> Corregir Físico</h3>
                             <div class="space-y-3">
                                 <input type="text" id="correc-sku" class="input-field sku-input" placeholder="SKU a corregir" required>
-                                <div class="text-xs text-red-400 hidden">SKU sin espacios.</div>
                                 <input type="number" id="correc-cantidad" class="input-field" placeholder="Nuevo Stock Físico TOTAL" required min="0">
                                 <input type="text" id="correc-nombre-admin" class="input-field" placeholder="Tu Nombre para auditoría" required>
                                 <button type="submit" class="btn btn-primary w-full">Corregir</button>
@@ -273,7 +260,6 @@
                             <h3 class="font-semibold text-lg mb-2"><i class="fa-solid fa-undo"></i> Anular Venta</h3>
                             <div class="space-y-3">
                                 <input type="text" id="anular-sku" class="input-field sku-input" placeholder="SKU de la venta" required>
-                                <div class="text-xs text-red-400 hidden">SKU sin espacios.</div>
                                 <input type="number" id="anular-cantidad" class="input-field" placeholder="Cantidad a anular" required min="1">
                                 <input type="text" id="anular-nombre-admin" class="input-field" placeholder="Tu Nombre para auditoría" required>
                                 <button type="submit" class="btn btn-primary w-full">Anular</button>
@@ -307,7 +293,7 @@
                     <div class="card xl:col-span-2">
                         <h2 class="text-xl font-semibold mb-4"><i class="fa-solid fa-clock-rotate-left"></i> Últimos 10 Movimientos</h2>
                         <div id="last-movements-list" class="space-y-2">
-                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -363,14 +349,22 @@
                     <p id="log-stat-total" class="text-3xl font-bold">0</p>
                 </div>
                 <div class="card text-center">
-                    <h3 class="text-sm font-semibold text-gray-500">SKU con Más Correcciones</h3>
+                    <h3 class="text-sm font-semibold text-gray-500">SKU con Más Problemas</h3>
                     <p id="log-stat-sku" class="text-2xl font-bold">-</p>
                 </div>
                 <div class="card text-center">
-                    <h3 class="text-sm font-semibold text-gray-500">Responsable Más Activo</h3>
+                    <h3 class="text-sm font-semibold text-gray-500">Empleado del Mes</h3>
                     <p id="log-stat-resp" class="text-2xl font-bold">-</p>
                 </div>
             </div>
+            
+            <div class="card mb-6">
+                <h3 class="text-lg font-semibold mb-4 text-gray-700">Rendimiento por Operador</h3>
+                <div style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="operatorChart"></canvas>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 p-4 rounded-lg" style="background-color: var(--bg-main);">
                 <div>
                     <label for="log-filter-date" class="block text-sm font-medium mb-1">Filtrar por Fecha:</label>
@@ -404,9 +398,6 @@
     </div>
     
     <script type="module">
-        // =========================================================================
-        // === 1. CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE =======================
-        // =========================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, onSnapshot, setDoc, addDoc, query, orderBy, serverTimestamp, writeBatch, getDocs, where, runTransaction, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -423,16 +414,11 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // =========================================================================
-        // === 2. CONSTANTES Y CONFIGURACIÓN =======================================
-        // =========================================================================
         let BUSINESS_ID = null;
-        const ADMIN_PASSWORD = '10234567'; // Contraseña para operaciones peligrosas
-        const LOG_PASSWORD = '220286'; // Contraseña para ver el log
+        const ADMIN_PASSWORD = '10234567'; 
+        const LOG_PASSWORD = '220286'; 
+        let operatorChartInstance = null;
 
-        // =========================================================================
-        // === 3. ESTADO DE LA APLICACIÓN Y DATOS ==================================
-        // =========================================================================
         let theoreticalStock = [], salesData = [], countData = [];
         let userEmail = null;
         let counterName = 'N/A';
@@ -440,9 +426,6 @@
         let fullAdminLogData = [];
         let memoizedDashboardData = [];
 
-        // =========================================================================
-        // === 4. SELECCIÓN DE ELEMENTOS DEL DOM ===================================
-        // =========================================================================
         const authSection = document.getElementById('auth-section');
         const appContent = document.getElementById('app-content');
         const userIdDisplay = document.getElementById('user-id-display');
@@ -492,9 +475,6 @@
         const btnClearData = document.getElementById('btn-limpiar-datos');
         const lastMovementsList = document.getElementById('last-movements-list');
 
-        // =========================================================================
-        // === 5. FUNCIONES DE UTILIDAD ============================================
-        // =========================================================================
         const showToast = (message, isError = false) => {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -552,15 +532,14 @@
             return 'Fecha inválida';
         };
         
-        const validateSku = (sku) => sku && /^[A-Z0-9_-]+$/.test(sku);
+        const validateSku = (sku) => sku && sku.length > 0;
+        const isSkuDirty = (sku) => !/^[A-Z0-9_-]+$/.test(sku);
         
         const setupSkuInputValidation = () => {
             document.querySelectorAll('.sku-input').forEach(input => {
                 input.addEventListener('input', e => {
-                    const warning = e.target.nextElementSibling;
                     const hasSpaces = e.target.value.includes(' ');
                     input.classList.toggle('invalid', hasSpaces);
-                    if (warning) warning.classList.toggle('hidden', !hasSpaces);
                 });
             });
         };
@@ -579,9 +558,6 @@
         
         const normalizeSku = (sku) => (typeof sku === 'string' ? sku.trim().toUpperCase() : '');
 
-        // =========================================================================
-        // === 6. LÓGICA DEL NEGOCIO Y CÁLCULO =====================================
-        // =========================================================================
         class SkuData {
             constructor(sku) { this.sku = sku; this.ventas = []; this.conteos = []; }
             getLatestConteo() {
@@ -653,8 +629,9 @@
             if (filteredData.length === 0) { dashboardBody.innerHTML = `<tr><td colspan="11" class="table-cell text-center">No hay datos para mostrar.</td></tr>`; return; }
             dashboardBody.innerHTML = filteredData.map(item => {
                 const badgeClass = `badge badge-${item.estado.toLowerCase().replace(/ /g, '-')}`;
+                const warningIcon = isSkuDirty(item.sku) ? '<i class="fa-solid fa-triangle-exclamation text-yellow-500 ml-1" title="Formato inusual"></i>' : '';
                 return `<tr>
-                    <td class="table-cell font-semibold">${item.sku}</td><td class="table-cell"><span class="${badgeClass}">${item.estado}</span></td>
+                    <td class="table-cell font-semibold">${item.sku} ${warningIcon}</td><td class="table-cell"><span class="${badgeClass}">${item.estado}</span></td>
                     <td class="table-cell text-right font-bold text-blue-600">${item.stock_fisico_proyectado ?? 'N/A'}</td> <td class="table-cell text-right font-bold">${item.diferencia_historica ?? 'N/A'}</td>
                     <td class="table-cell text-right">${item.conteo_fisico}</td> <td class="table-cell text-right">${item.stock_teorico_al_contar ?? 'N/A'}</td>
                     <td class="table-cell text-right">${item.stock_teorico_actual}</td> <td class="table-cell text-right">${item.total_vendido}</td>
@@ -669,58 +646,106 @@
             const filterSku = document.getElementById('log-filter-sku').value.trim().toUpperCase();
             const filterResp = document.getElementById('log-filter-resp').value.trim().toLowerCase();
             
-            // 1. Aplicar filtros
             const filteredData = fullAdminLogData.filter(log => {
                 const logDate = log.timestamp ? log.timestamp.toDate() : new Date();
                 const logResp = log.responsible ? log.responsible.toLowerCase() : '';
-                const dateMatch = !filterDate || logDate.toISOString().startsWith(filterDate);
+                const logDateString = logDate.toISOString().split('T')[0];
+                const dateMatch = !filterDate || logDateString === filterDate;
                 const skuMatch = !filterSku || (log.sku && log.sku.toUpperCase().includes(filterSku));
                 const respMatch = !filterResp || logResp.includes(filterResp);
                 return dateMatch && skuMatch && respMatch;
             });
             
-            // 2. Actualizar tarjetas de resumen
             logStatTotal.textContent = filteredData.length;
-            const corrections = filteredData.filter(log => log.type === 'Corrección Admin' || log.type === 'Anulación');
-            const skuCounts = corrections.reduce((acc, log) => {
+
+            const problemLogs = filteredData.filter(log => ['Corrección Admin', 'Anulación', 'Limpieza de Datos'].includes(log.type));
+            const skuCounts = problemLogs.reduce((acc, log) => {
                 if (log.sku) acc[log.sku] = (acc[log.sku] || 0) + 1;
                 return acc;
             }, {});
             const topSku = Object.keys(skuCounts).sort((a, b) => skuCounts[b] - skuCounts[a])[0] || '-';
             logStatSku.textContent = topSku;
-            const respCounts = filteredData.reduce((acc, log) => {
-                if (log.responsible) acc[log.responsible] = (acc[log.responsible] || 0) + 1;
+
+            const workLogs = filteredData.filter(log => ['Conteo Físico', 'Venta', 'Reposición (Físico)'].includes(log.type));
+            const respCounts = workLogs.reduce((acc, log) => {
+                const name = log.responsible || 'Desconocido';
+                acc[name] = (acc[name] || 0) + 1;
                 return acc;
             }, {});
             const topResp = Object.keys(respCounts).sort((a, b) => respCounts[b] - respCounts[a])[0] || '-';
             logStatResp.textContent = topResp;
+
+            const ctx = document.getElementById('operatorChart').getContext('2d');
+            const operatorNames = Object.keys(respCounts);
+            const operatorValues = operatorNames.map(name => respCounts[name]);
+
+            if (operatorChartInstance) operatorChartInstance.destroy();
+            operatorChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: operatorNames,
+                    datasets: [{
+                        label: 'Movimientos Productivos',
+                        data: operatorValues,
+                        backgroundColor: 'rgba(234, 179, 168, 0.7)',
+                        borderColor: 'rgba(234, 179, 168, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
             
-            // 3. Renderizar tabla
             const logBody = document.getElementById('admin-log-body');
             if (filteredData.length === 0) {
-                logBody.innerHTML = `<tr><td colspan="6" class="table-cell text-center">No hay movimientos que coincidan con los filtros.</td></tr>`;
+                logBody.innerHTML = `<tr><td colspan="6" class="table-cell text-center py-8 text-gray-400">No hay datos.</td></tr>`;
                 return;
             }
-            logBody.innerHTML = filteredData.map(log => `
-                <tr>
-                    <td class="table-cell">${formatFirebaseTimestamp(log.timestamp)}</td>
-                    <td class="table-cell">${log.type || '-'}</td>
-                    <td class="table-cell font-semibold">${log.sku || '-'}</td>
-                    <td class="table-cell text-right">${log.quantity != null ? log.quantity : '-'}</td>
-                    <td class="table-cell">${log.responsible || '-'}</td>
-                    <td class="table-cell text-sm text-gray-500">${log.detail || ''}</td>
-                </tr>
-            `).join('');
+
+            logBody.innerHTML = filteredData.map(log => {
+                let rowClass = "hover:bg-gray-50"; 
+                let icon = "fa-circle-info";
+                let colorClass = "text-gray-600";
+                let amountStyle = "";
+
+                if (log.type === 'Anulación') {
+                    rowClass = "bg-red-50 hover:bg-red-100"; 
+                    icon = "fa-ban";
+                    colorClass = "text-red-600 font-bold";
+                    amountStyle = "text-red-600 font-bold";
+                } else if (log.type === 'Corrección Admin') {
+                    rowClass = "bg-yellow-50 hover:bg-yellow-100";
+                    icon = "fa-pen-to-square";
+                    colorClass = "text-yellow-700";
+                } else if (log.type === 'Conteo Físico') {
+                    icon = "fa-check";
+                    colorClass = "text-green-600";
+                } else if (log.type === 'Venta') {
+                    icon = "fa-cart-shopping";
+                    colorClass = "text-blue-500";
+                }
+
+                return `
+                    <tr class="${rowClass} transition-colors border-b last:border-0">
+                        <td class="table-cell text-xs text-gray-500">${formatFirebaseTimestamp(log.timestamp)}</td>
+                        <td class="table-cell"><div class="flex items-center gap-2"><i class="fa-solid ${icon} ${colorClass} w-4 text-center"></i><span class="font-medium ${colorClass}">${log.type || '-'}</span></div></td>
+                        <td class="table-cell font-mono font-bold text-gray-700">${log.sku || '-'}</td>
+                        <td class="table-cell text-right ${amountStyle}">${log.quantity != null ? log.quantity : '-'}</td>
+                        <td class="table-cell"><span class="px-2 py-1 rounded-full bg-white border text-xs font-semibold text-gray-600">${log.responsible || '-'}</span></td>
+                        <td class="table-cell text-sm text-gray-500 italic">${log.detail || ''}</td>
+                    </tr>
+                `;
+            }).join('');
         };
         
-        /* === INICIO: Nueva función renderLastMovements mejorada y robusta === */
         const renderLastMovements = (movements) => {
-            lastMovementsList.innerHTML = ''; // Limpiar la lista
-            if (movements.length === 0) {
-                lastMovementsList.innerHTML = `<div class="text-center text-gray-400">No hay movimientos recientes.</div>`;
-                return;
-            }
-            // Objeto de configuración para estilos, más limpio que una cadena de if/else
+            lastMovementsList.innerHTML = ''; 
+            if (movements.length === 0) { lastMovementsList.innerHTML = `<div class="text-center text-gray-400">No hay movimientos recientes.</div>`; return; }
             const movementStyles = {
                 'Venta': { icon: 'fa-solid fa-cart-shopping', color: 'text-blue-600' },
                 'Conteo Físico': { icon: 'fa-solid fa-boxes-stacked', color: 'text-purple-600' },
@@ -731,27 +756,16 @@
                 'Reposición (Teórico)': { icon: 'fa-solid fa-truck', color: 'text-teal-600' },
                 'Catálogo': { icon: 'fa-solid fa-file-import', color: 'text-green-600' }
             };
-
             movements.forEach(log => {
                 const item = document.createElement('div');
                 item.className = 'last-movements-item flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1';
-
                 const logDate = log.timestamp.toDate();
-                // Formato de fecha robusto con Intl.DateTimeFormat
                 const datePart = new Intl.DateTimeFormat('es-AR').format(logDate);
                 const timePart = new Intl.DateTimeFormat('es-AR', { hour: '2-digit', minute: '2-digit' }).format(logDate);
-
-                // Usa el mapa para obtener el estilo, o usa un por defecto
                 let style = movementStyles[log.type] || { icon: 'fa-solid fa-arrow-up', color: 'text-green-600' };
-
-                // Ajusta el icono y color si la cantidad es negativa
-                if (log.quantity < 0) {
-                    style = { icon: 'fa-solid fa-arrow-down', color: 'text-red-600' };
-                }
-                
+                if (log.quantity < 0) { style = { icon: 'fa-solid fa-arrow-down', color: 'text-red-600' }; }
                 const typeLabel = log.type || 'Movimiento';
                 const quantityText = log.quantity != null ? (log.quantity > 0 ? '+' : '') + log.quantity : '-';
-
                 item.innerHTML = `
                     <div class="flex flex-wrap gap-2 items-center flex-grow">
                         <span class="font-semibold text-sm">${typeLabel}</span>
@@ -760,20 +774,14 @@
                         ${log.detail ? `<span class="text-gray-500 text-xs italic">Detalle: ${log.detail}</span>` : ''}
                     </div>
                     <div class="text-right min-w-[100px]">
-                        <span class="font-semibold ${style.color}">
-                            <i class="${style.icon}"></i> ${quantityText}
-                        </span>
+                        <span class="font-semibold ${style.color}"><i class="${style.icon}"></i> ${quantityText}</span>
                         <div class="text-xs text-gray-400">${datePart} ${timePart}</div>
                     </div>
                 `;
                 lastMovementsList.appendChild(item);
             });
         };
-        /* === FIN: Nueva función renderLastMovements mejorada y robusta === */
 
-        // =========================================================================
-        // === 7. MANEJADORES DE EVENTOS ===========================================
-        // =========================================================================
         const debouncedRender = debounce(() => { renderDashboard(getDashboardData()); }, 250);
 
         btnLogin.addEventListener('click', () => signInWithEmailAndPassword(auth, authEmailInput.value, authPasswordInput.value).catch(() => showToast("Error de autenticación.", true)));
@@ -804,37 +812,33 @@
                 const text = await file.text();
                 const lines = text.split(/\r?\n/).filter(line => line.trim());
                 if (lines.length > 0 && lines[0].toUpperCase().includes('SKU;STOCK')) lines.shift();
-                const seenSkus = new Set();
+                
                 const dataToUpload = [];
-                const errors = [];
+                const errorsWithDirtySkus = [];
+                
                 lines.forEach((line, index) => {
                     const [skuRaw, stockRaw] = line.split(';');
                     const sku = normalizeSku(skuRaw);
                     const lineNumber = index + 1;
-                    if (!skuRaw || !skuRaw.trim()) { errors.push({ linea: lineNumber, sku: 'VACÍO', motivo: 'SKU está vacío.' }); return; }
-                    if (!validateSku(sku)) { errors.push({ linea: lineNumber, sku: skuRaw, motivo: 'El SKU contiene espacios o caracteres no permitidos.' }); return; }
-                    if (seenSkus.has(sku)) { errors.push({ linea: lineNumber, sku: skuRaw, motivo: 'El SKU está duplicado en este mismo archivo.' }); return; }
-                    seenSkus.add(sku);
+                    if (!sku || sku.length === 0) return;
+                    
+                    if (isSkuDirty(sku)) {
+                        errorsWithDirtySkus.push({ linea: lineNumber, sku: skuRaw, motivo: 'Formato inusual (Espacios o Puntos)' });
+                    }
+                    
                     let stock = parseFloat(stockRaw?.trim().replace(',', '.'));
                     if (isNaN(stock)) stock = 0;
                     dataToUpload.push({ sku, stock, timestamp: serverTimestamp() });
                 });
-                if (errors.length > 0) {
-                    const errorHeaders = ["Linea_Archivo", "SKU_Problematico", "Motivo_del_Error"];
-                    const errorCsvContent = [
-                        errorHeaders.join(';'),
-                        ...errors.map(e => [e.linea, e.sku, e.motivo].join(';'))
-                    ].join('\n');
-                    downloadCsv(`reporte_errores_catalogo_${new Date().toISOString().slice(0, 10)}.csv`, errorCsvContent);
-                    showToast(`Se encontraron ${errors.length} errores. Se ha descargado un reporte.`, true);
-                }
+                
                 if (dataToUpload.length === 0) {
-                    if (errors.length === 0) showToast("El archivo está vacío o no tiene datos válidos.", true);
+                    showToast("El archivo está vacío o no tiene datos válidos.", true);
                     e.target.value = '';
                     return;
                 }
+                
                 showModal(
-                    `Se cargarán ${dataToUpload.length} SKUs válidos. Esto reemplazará el catálogo teórico actual.`,
+                    `Se cargarán ${dataToUpload.length} SKUs. Esto reemplazará el catálogo teórico actual.`,
                     true,
                     async () => {
                         const batch = writeBatch(db);
@@ -845,6 +849,16 @@
                         await batch.commit();
                         showToast(`Catálogo cargado con ${dataToUpload.length} productos.`);
                         await logAction('Catálogo', 'N/A', dataToUpload.length, userEmail);
+                        
+                        if (errorsWithDirtySkus.length > 0) {
+                            const errorHeaders = ["Linea", "SKU_Original", "Motivo"];
+                            const csvContent = [
+                                errorHeaders.join(';'),
+                                ...errorsWithDirtySkus.map(e => [e.linea, e.sku, e.motivo].join(';'))
+                            ].join('\n');
+                            downloadCsv(`reporte_skus_para_corregir_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+                            showToast("Se descargó un reporte con SKUs para revisar.");
+                        }
                         e.target.value = '';
                     }
                 );
@@ -898,11 +912,8 @@
                         counter: counterName, 
                         lastTimestamp: serverTimestamp()
                     };
-                    if (!countDoc.exists()) {
-                        dataToSet.firstTimestamp = serverTimestamp();
-                    } else {
-                        dataToSet.firstTimestamp = data.firstTimestamp;
-                    }
+                    if (!countDoc.exists()) { dataToSet.firstTimestamp = serverTimestamp(); } 
+                    else { dataToSet.firstTimestamp = data.firstTimestamp; }
                     transaction.set(countDocRef, dataToSet);
                 });
                 await logAction('Conteo Físico', sku, quantity, counterName, `Añadidas ${quantity} uds.`);
@@ -915,64 +926,33 @@
             }
         });
 
-        /* === Código de corrección de Admin mejorado con transacciones === */
         formCorrectionAdmin.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitButton = e.submitter;
             const sku = normalizeSku(correctionSkuInput.value);
             const quantity = Number(correctionQuantityInput.value);
             const name = correctionAdminNameInput.value.trim();
-
             if (!validateSku(sku) || quantity < 0 || !name) return showToast("Datos inválidos.", true);
-
             const password = await requestPassword();
-            if (password !== ADMIN_PASSWORD) {
-                if (password !== null) showToast("Contraseña incorrecta.", true);
-                return;
-            }
-
+            if (password !== ADMIN_PASSWORD) { if (password !== null) showToast("Contraseña incorrecta.", true); return; }
             toggleButton(submitButton, false);
             submitButton.classList.add('btn-processing');
-
             try {
                 const countDocRef = doc(db, `businesses/${BUSINESS_ID}/countData`, sku);
-                
-                // Usamos una transacción para leer y escribir de forma segura y atómica
                 await runTransaction(db, async (transaction) => {
                     const countDoc = await transaction.get(countDocRef);
                     const now = serverTimestamp();
-
                     if (countDoc.exists()) {
-                        // Si el documento existe, solo actualizamos los campos necesarios
-                        // Se preserva el 'firstTimestamp' original.
-                        transaction.update(countDocRef, {
-                            quantity: quantity,
-                            counter: name,
-                            lastTimestamp: now
-                        });
+                        transaction.update(countDocRef, { quantity: quantity, counter: name, lastTimestamp: now });
                     } else {
-                        // Si no existe, lo creamos estableciendo ambas fechas
-                        transaction.set(countDocRef, {
-                            sku,
-                            quantity,
-                            type: 'conteo',
-                            counter: name,
-                            firstTimestamp: now, // Primera vez que se cuenta
-                            lastTimestamp: now
-                        });
+                        transaction.set(countDocRef, { sku, quantity, type: 'conteo', counter: name, firstTimestamp: now, lastTimestamp: now });
                     }
                 });
-
                 await logAction('Corrección Admin', sku, quantity, name, `Stock Físico TOTAL fijado a ${quantity}.`);
                 showToast("Stock físico corregido.");
                 formCorrectionAdmin.reset();
-            } catch (err) {
-                showToast("Error al corregir.", true);
-                console.error(err);
-            } finally {
-                toggleButton(submitButton, true);
-                submitButton.classList.remove('btn-processing');
-            }
+            } catch (err) { showToast("Error al corregir.", true); console.error(err); } 
+            finally { toggleButton(submitButton, true); submitButton.classList.remove('btn-processing'); }
         });
 
         formAnulacion.addEventListener('submit', async (e) => {
@@ -992,10 +972,7 @@
                 showToast("Venta anulada.");
                 formAnulacion.reset();
             } catch (err) { showToast("Error al anular.", true); console.error(err); }
-            finally {
-                toggleButton(submitButton, true);
-                submitButton.classList.remove('btn-processing');
-            }
+            finally { toggleButton(submitButton, true); submitButton.classList.remove('btn-processing'); }
         });
 
         formReposicionCsv.addEventListener('submit', async (e) => {
@@ -1040,10 +1017,7 @@
                     showToast(`Reposición completada. ${successCount}/${dataToUpload.length} SKUs actualizados.`);
                     formReposicionCsv.reset();
                 } catch (err) { showToast("Error procesando el archivo.", true); console.error(err); }
-                finally {
-                    toggleButton(submitButton, true);
-                    submitButton.classList.remove('btn-processing');
-                }
+                finally { toggleButton(submitButton, true); submitButton.classList.remove('btn-processing'); }
             };
             reader.readAsText(file);
         });
@@ -1063,10 +1037,7 @@
 
         btnOpenAdminLog.addEventListener('click', async () => {
             const password = await requestPassword();
-            if (password !== LOG_PASSWORD) {
-                if (password !== null) showToast("Contraseña incorrecta.", true);
-                return;
-            }
+            if (password !== LOG_PASSWORD) { if (password !== null) showToast("Contraseña incorrecta.", true); return; }
             logFilterDate.value = '';
             logFilterSku.value = '';
             logFilterResp.value = '';
@@ -1111,9 +1082,6 @@
             });
         });
 
-        // =========================================================================
-        // === 8. LÓGICA DE FIREBASE Y SINCRONIZACIÓN ==============================
-        // =========================================================================
         const startFirestoreListeners = () => {
             if (!BUSINESS_ID) return;
             const errHandler = (err) => { console.error(err); showToast("Error de sincronización.", true); };
@@ -1121,7 +1089,6 @@
             unsubscribes.push(onSnapshot(collection(db, `businesses/${BUSINESS_ID}/salesData`), snap => { salesData = snap.docs.map(d => ({ id: d.id, ...d.data() })); debouncedRender(); }, errHandler));
             unsubscribes.push(onSnapshot(collection(db, `businesses/${BUSINESS_ID}/countData`), snap => { countData = snap.docs.map(d => ({ id: d.id, ...d.data() })); debouncedRender(); }, errHandler));
             
-            // Listener para los últimos 10 movimientos
             const lastMovementsQuery = query(collection(db, `businesses/${BUSINESS_ID}/auditLog`), orderBy('timestamp', 'desc'), limit(10));
             unsubscribes.push(onSnapshot(lastMovementsQuery, snap => {
                 const movements = snap.docs.map(d => d.data());
@@ -1136,9 +1103,6 @@
             try { await addDoc(collection(db, `businesses/${BUSINESS_ID}/auditLog`), { type, sku, quantity, responsible, detail, timestamp: serverTimestamp() }); } catch (e) { console.error("Log error:", e); }
         };
 
-        // =========================================================================
-        // === 9. INICIALIZACIÓN DE LA APLICACIÓN ==================================
-        // =========================================================================
         onAuthStateChanged(auth, user => {
             stopFirestoreListeners();
             [theoreticalStock, salesData, countData] = [[], [], []];
@@ -1155,7 +1119,6 @@
             }
         });
         
-        // Configuración inicial de la interfaz
         setupSkuInputValidation();
         setCountingModuleState(false);
     </script>
