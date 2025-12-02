@@ -55,7 +55,11 @@
         #toast.success { background-color: var(--success); color: #065F46; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        
+        /* CORRECCION Z-INDEX: Panel normal 50, Modal de Alerta/Password 100+ */
         .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center; }
+        #myModal { z-index: 9999 !important; } /* ESTA LINEA ARREGLA QUE LA CONTRASEÑA NO SE VEA */
+        
         .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border-radius: 0.5rem; box-shadow: 0 4px 6px -1-px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); width: 90%; max-width: 1024px; text-align: left; }
         .last-movements-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.875rem; }
         .last-movements-item:last-child { border-bottom: none; }
@@ -204,6 +208,7 @@
     </main>
     
     <div id="toast"></div>
+    
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div id="modal-message" class="text-lg font-semibold mb-4"></div>
@@ -275,8 +280,8 @@
     </div>
     
     <script type="module">
-    
-        const NOMBRE_NEGOCIO = "Smart Group Hl"; 
+        
+        const NOMBRE_NEGOCIO = "Smart Group HL"; 
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -528,11 +533,11 @@
         const renderAndAnalyzeAdminLog = () => {
             const filterDate = document.getElementById('log-filter-date').value;
             const filterSku = document.getElementById('log-filter-sku').value.trim().toUpperCase();
-            const filterResp = document.getElementById('log-filter-resp').value.trim().toLowerCase();
+            const filterResp = document.getElementById('log-filter-resp').value.trim().toUpperCase(); // CORREGIDO: toUpperCase
             
             const filteredData = fullAdminLogData.filter(log => {
                 const logDate = log.timestamp ? log.timestamp.toDate() : new Date();
-                const logResp = log.responsible ? log.responsible.toLowerCase() : '';
+                const logResp = log.responsible ? log.responsible.toUpperCase() : ''; // CORREGIDO: toUpperCase
                 const logDateString = logDate.toISOString().split('T')[0];
                 const dateMatch = !filterDate || logDateString === filterDate;
                 const skuMatch = !filterSku || (log.sku && log.sku.toUpperCase().includes(filterSku));
@@ -552,7 +557,7 @@
 
             const workLogs = filteredData.filter(log => ['Conteo Físico', 'Venta', 'Reposición (Físico)'].includes(log.type));
             const respCounts = workLogs.reduce((acc, log) => {
-                const name = log.responsible || 'Desconocido';
+                const name = log.responsible ? log.responsible.toUpperCase() : 'DESCONOCIDO'; // CORREGIDO: Mayusculas
                 acc[name] = (acc[name] || 0) + 1;
                 return acc;
             }, {});
@@ -677,7 +682,8 @@
         btnSaveCounterName.addEventListener('click', () => {
             const isEditing = !counterNameInput.disabled;
             if (isEditing) {
-                const newName = counterNameInput.value.trim();
+                // CORREGIDO: toUpperCase() PARA EVITAR DUPLICADOS "tamy" vs "TAMY"
+                const newName = counterNameInput.value.trim().toUpperCase();
                 if (newName) {
                     counterName = newName; counterDisplay.textContent = newName; counterNameInput.disabled = true;
                     btnSaveCounterName.innerHTML = '<i class="fa-solid fa-pencil"></i> Cambiar'; setCountingModuleState(true);
@@ -815,7 +821,8 @@
             const submitButton = e.submitter;
             const sku = normalizeSku(correctionSkuInput.value);
             const quantity = Number(correctionQuantityInput.value);
-            const name = correctionAdminNameInput.value.trim();
+            // CORREGIDO: toUpperCase()
+            const name = correctionAdminNameInput.value.trim().toUpperCase();
             if (!validateSku(sku) || quantity < 0 || !name) return showToast("Datos inválidos.", true);
             const password = await requestPassword();
             if (password !== ADMIN_PASSWORD) { if (password !== null) showToast("Contraseña incorrecta.", true); return; }
@@ -844,7 +851,8 @@
             const submitButton = e.submitter;
             const sku = normalizeSku(cancellationSkuInput.value);
             const quantity = Number(cancellationQuantityInput.value);
-            const name = cancellationAdminNameInput.value.trim();
+            // CORREGIDO: toUpperCase()
+            const name = cancellationAdminNameInput.value.trim().toUpperCase();
             if (!validateSku(sku) || quantity <= 0 || !name) return showToast("Datos inválidos.", true);
             const password = await requestPassword();
             if (password !== ADMIN_PASSWORD) { if (password !== null) showToast("Contraseña incorrecta.", true); return; }
@@ -863,7 +871,8 @@
             e.preventDefault();
             const submitButton = e.submitter;
             const file = repoCsvInput.files[0];
-            const name = repoAdminNameInput.value.trim();
+            // CORREGIDO: toUpperCase()
+            const name = repoAdminNameInput.value.trim().toUpperCase();
             if (!file || !name) return showToast("Complete todos los campos.", true);
             const password = await requestPassword();
             if (password !== ADMIN_PASSWORD) { if (password !== null) showToast("Contraseña incorrecta.", true); return; }
@@ -942,6 +951,10 @@
                 const batch = writeBatch(db);
                 logsDocs.forEach(doc => batch.delete(doc.ref));
                 await batch.commit();
+                
+                // CORREGIDO: Actualización visual inmediata
+                fullAdminLogData = []; 
+                renderAndAnalyzeAdminLog(); 
                 showToast("Log de auditoría limpiado.");
             });
         });
@@ -961,6 +974,13 @@
                     docs.forEach(doc => batch.delete(doc.ref));
                     await batch.commit();
                 }
+                
+                // CORREGIDO: Limpieza visual inmediata de las variables locales
+                theoreticalStock = [];
+                salesData = [];
+                countData = [];
+                renderDashboard([]); // Renderizar tabla vacía
+                
                 await logAction('Limpieza de Datos', 'SISTEMA', 0, userEmail, 'Se eliminaron todos los datos operativos.');
                 showToast("Todos los datos del negocio han sido eliminados.");
             });
@@ -984,7 +1004,9 @@
         
         const logAction = async (type, sku, quantity, responsible, detail = '') => {
             if (!BUSINESS_ID) return;
-            try { await addDoc(collection(db, `businesses/${BUSINESS_ID}/auditLog`), { type, sku, quantity, responsible, detail, timestamp: serverTimestamp() }); } catch (e) { console.error("Log error:", e); }
+            // Asegurar que el responsable vaya en mayúsculas también aquí por si acaso
+            const safeResponsible = responsible ? responsible.toUpperCase() : 'SISTEMA';
+            try { await addDoc(collection(db, `businesses/${BUSINESS_ID}/auditLog`), { type, sku, quantity, responsible: safeResponsible, detail, timestamp: serverTimestamp() }); } catch (e) { console.error("Log error:", e); }
         };
 
         onAuthStateChanged(auth, user => {
